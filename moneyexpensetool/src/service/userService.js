@@ -6,7 +6,7 @@ const serverRoute = "/api/User/";
 const UserService = {
 
   async addUser(newUser) {
-    debugger
+    
     return await http.post(serverRoute + "addUser", newUser);
   },
 
@@ -15,7 +15,7 @@ const UserService = {
   },
 
   async UpdateUser(newUser) {
-    debugger
+    
     return await http.post(serverRoute + "updateUser", newUser);
   },
 

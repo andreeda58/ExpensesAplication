@@ -4,6 +4,7 @@ import UserService from '../service/userService';
 import TextField from '@mui/material/TextField';
 
 import { CreateInitialDate, CreateFinalDate } from "../service/daysTrackingService"
+import environment from '../environments/environment';
 
 
 const SettingsPage = () => {
@@ -25,12 +26,11 @@ const SettingsPage = () => {
 
     const Submit = async (event) => {
         event.preventDefault();
-        debugger
 
         let initDay = CreateInitialDate(dayTracking);
         let finDate = CreateFinalDate(initDay);
         let data = { name: name, currentBalance: currentBalance, dayOfTracking: dayTracking, startDate: new Date(initDay), expireDate: new Date(finDate) };
-        debugger
+        
         await UserService.UpdateUser(data);
         setUserAdded(true);
     }
@@ -38,8 +38,8 @@ const SettingsPage = () => {
 
     if (!userAdded) {
         return (
-            <div>
-                <form onSubmit={Submit}>
+            <div className='wrapper'>
+                <form onSubmit={Submit} className='container'>
                     <div>
                         <div>Insert Name :</div>
                         <br />
@@ -51,9 +51,9 @@ const SettingsPage = () => {
                             label="Name"
                         />
                     </div>
-                    <br />
+                    
                     <div>
-                        <div>Insert Current balance on you bank account :</div>
+                        <div>Insert Current balance:</div>
                         <br />
                         <TextField
                             required
@@ -68,7 +68,7 @@ const SettingsPage = () => {
                     </div>
 
                     <div>
-                        <div>Insert Current balance on you bank account :</div>
+                        <div>Insert expiration date :</div>
                         <br />
                         <TextField
                             required
@@ -82,7 +82,7 @@ const SettingsPage = () => {
                         />
                     </div>
                     <br />
-                    <button type="submit">
+                    <button className="btn btn-primary" type="submit">
                         Save
                     </button>
                 </form>

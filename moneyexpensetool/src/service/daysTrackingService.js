@@ -24,13 +24,13 @@ export const CreateInitialDate=(day)=>{
 
 }
 export const CreateFinalDate=(initialDay)=>{
-    debugger
+    
    let arrayDate= initialDay.split("-");
-   debugger
+   
    let day=arrayDate[1];
    let month=parseInt(arrayDate[0])+1
    let year=arrayDate[2];
-   debugger
+   
    if(month>12)
    {
        month=1;

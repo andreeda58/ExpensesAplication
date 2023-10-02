@@ -23,7 +23,7 @@ const AddExpensePage = () => {
     const Submit = async (event) => {
         event.preventDefault();
 
-        if(totalExpense == 0){setError(true);return}
+        if(totalExpense === 0){setError(true);return}
 
         let data = {
             storeName: storeName,
@@ -37,7 +37,7 @@ const AddExpensePage = () => {
     }
     const CancelButtonClicked = () => {
         
-        if (storeName.trim() != "" || totalExpense != 0) 
+        if (storeName.trim() !== "" || totalExpense !== 0) 
             setDataFound(true);
         else 
             navigate("/")
@@ -46,7 +46,7 @@ const AddExpensePage = () => {
 
     if (!expenseAdded) {
         return (
-            <div>
+            <div className='container'>
                 <div>
                     Store Name:
                 </div>
@@ -76,9 +76,9 @@ const AddExpensePage = () => {
                 />
                  <br/>
                  <br/>
-                <div>
-                    <button onClick={Submit}>Add</button>
-                    <button onClick={CancelButtonClicked}>cancel</button>
+                <div id='wrapper btns'>
+                    <button className="btn btn-primary" onClick={Submit}>Add</button>
+                    <button className="btn btn-danger" onClick={CancelButtonClicked}>cancel</button>
                 </div>
                 {
                     error && (<div>
@@ -89,8 +89,8 @@ const AddExpensePage = () => {
                     <Card>
                         <CardContent>
                             <h5>Are You Sure??</h5>
-                            <button onClick={()=>{navigate("/")}}>yes</button>
-                            <button onClick={() => {setDataFound(false) }}>no</button>
+                            <button className="btn btn-primary" onClick={()=>{navigate("/")}}>yes</button>
+                            <button className="btn btn-danger" onClick={() => {setDataFound(false) }}>no</button>
                         </CardContent>
                     </Card>
 

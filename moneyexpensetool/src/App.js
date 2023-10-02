@@ -1,40 +1,41 @@
 
 
-import { Main } from "./components/UIKit/Grid"
-import Line from "./components/UIKit/Line"
+
 import './App.css';
-import { BrowserRouter, Route, Routes, Link} from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AddExpensePage from './components/AddExpensePage';
 import SettingsPage from './components/SettingsPage';
 import HomePage from './components/HomePage';
 import SaveSuccessfully from './components/UIKit/SaveSuccessfully';
+import NavBar from "./components/UIKit/NavBar";
+
+const collection = [{
+  path: "/",
+  title: "Home",
+}, {
+  path: "/SettingsPage",
+  title: "Settings",
+},
+{
+  path: "/AddExpensePage",
+  title: "Add",
+}]
 
 
 function App() {
   return (
-
-    <Main>
+    <div className="App" >
       <BrowserRouter>
-        <Line justify="center" >
-              <div>
-                <Link className="btn btn-success" to="/">HomePage</Link>
-                <Link className="btn btn-primary" to="/SettingsPage">SettingsPage</Link>
-                <Link className="btn btn-info" to="/AddExpensePage">AddExpensePage</Link>
-              </div>
-        </Line>
+        <NavBar routesCollection={collection}></NavBar>
+        <Routes>
+          <Route path="/" exact element={<HomePage />} />
+          <Route path="/SettingsPage" element={<SettingsPage />} />
+          <Route path="/AddExpensePage" element={<AddExpensePage />} />
+          <Route path="/saveSuccessfully" element={<SaveSuccessfully />} />
+        </Routes>
 
-        <div>
-          <Routes>
-
-            <Route path="/" exact element={<HomePage />} />
-            <Route path="/SettingsPage" element={<SettingsPage />} />
-            <Route path="/AddExpensePage" element={<AddExpensePage />} />
-            <Route path="/saveSuccessfully" element={<SaveSuccessfully />} />
-          </Routes>
-        </div>
       </BrowserRouter>
-
-    </Main>
+    </div>
 
   );
 }

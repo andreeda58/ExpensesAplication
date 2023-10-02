@@ -9,7 +9,7 @@ class ExpensesController {
             storeName: expense.storeName,
             totalExpense: expense.totalExpense,
             user: {
-                _id: "62114325301333f10ad0d766"
+                _id: process.env.USERID
             },
             date: expense.date
         })
@@ -28,7 +28,6 @@ class ExpensesController {
         const expensesByDates = await Expenses.find({ date: { $gte: new Date(Dates.startDate), $lt: new Date(Dates.expireDate) } })
         if (expensesByDates != []) {
             expensesByDates.forEach(element => {
-                debugger
                 sum = sum + element._doc.totalExpense;
             });
         }

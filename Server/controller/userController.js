@@ -21,7 +21,7 @@ class UserController {
 
     async UpdateUser(newUser) {
         console.log(newUser);
-        const updateUser=await User.findByIdAndUpdate("62114325301333f10ad0d766",{$set:newUser})
+        const updateUser=await User.findByIdAndUpdate(process.env.USERID,{$set:newUser})
         return updateUser;
     }
 

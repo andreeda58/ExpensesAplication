@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ExpensesService from "../service/expensesService";
 import UserService from "../service/userService";
 import { CreateInitialDate, CreateFinalDate } from "../service/daysTrackingService"
+import environment from "../environments/environment";
 
 
 const HomePage = () => {
@@ -11,9 +12,9 @@ const HomePage = () => {
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [allExpensesByDate, setAllExpensesByDate] = useState(0);
 
-    useEffect(async () => {
-        let user = await UserService.getUserById("62114325301333f10ad0d766")
-        debugger
+    const LoadDataAsync = async () => {
+        let user = await UserService.getUserById(environment.userId)
+
         let initDay = user.data.startDate;
         let finDate = user.data.expireDate;
         let actualDate = new Date(Date.now())
@@ -27,15 +28,23 @@ const HomePage = () => {
             initDay = CreateInitialDate(user.data.dayOfTracking)
             finDate = CreateFinalDate(initDay);
             // update data
-            await UserService.UpdateUser({ startDate: initDay, expireDate: finDate, currentBalance: user.data.currentBalance - (sumOldExpenses.data.length == 0 ? 0 : sumOldExpenses.data.sum) });
+            await UserService.UpdateUser({
+                startDate: initDay,
+                expireDate: finDate,
+                currentBalance: user.data.currentBalance - (sumOldExpenses.data.length === 0 ? 0 : sumOldExpenses.data.sum)
+            });
         }
 
         let sum = await ExpensesService.getSumExpensesByDates({ startDate: initDay, expireDate: finDate })
         let filterExpenses = await ExpensesService.getExpensesByDates({ startDate: initDay, expireDate: finDate })
 
-        setTotalExpenses(sum.data.length == 0 ? 0 : sum.data.sum);
+        setTotalExpenses(sum.data.length === 0 ? 0 : sum.data.sum);
         setAllExpensesByDate(filterExpenses.data);
         setUser(user.data);
+    }
+
+    useEffect(() => {
+        LoadDataAsync();
     }, [])
 
 
@@ -64,14 +73,14 @@ const HomePage = () => {
             <h1>
                 HomePage
             </h1>
-            {user && (<div>
-                <h3>Name:{user.name} </h3>
-                <h4>Expenses:{totalExpenses} </h4>
-                <h4>Money at the end of the month :{user.currentBalance - totalExpenses} </h4>
+            {user && (<div className="container">
+                <h3>Name : {user.name} </h3>
+                <h4>Expenses : {totalExpenses} </h4>
+                <h4>Money at the end of the month : {user.currentBalance - totalExpenses} </h4>
             </div>)}
-            <div>
-                <button onClick={() => { setButtonDetailsClicked(!buttonDetailsClicked) }}>
-                    details
+            <div className="container">
+                <button id="Btn-Details" className="btn btn-info" onClick={() => { setButtonDetailsClicked(!buttonDetailsClicked) }}>
+                    Details
                 </button>
                 <br />
                 <br />
