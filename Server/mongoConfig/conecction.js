@@ -1,10 +1,11 @@
+require("dotenv").config();
 const pkg = require("mongoose");
 const { connect } = pkg;
 
 
- module.exports.startConnection= async function startConnection() {
+module.exports.startConnection = async function startConnection() {
   const db = await
-    connect("mongodb+srv://andreeda58:Sasuke29@reactproyect.aeofv.mongodb.net/DataProyect?retryWrites=true&w=majority")
+    connect(process.env.MONGODBCONNECTION || "")
       .then(() => {
         console.log("mongooseConect");
       })
