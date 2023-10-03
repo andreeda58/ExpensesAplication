@@ -25,7 +25,8 @@ const ExpensesService = {
   },
 
   async deleteExpense(id){
-    return 	    await http.delete(` ${serverRoute}deleteExpense/${id}`) ;
+
+    return 	await http.delete(`${serverRoute}deleteExpense/${id}`) ;
   }
 
 }

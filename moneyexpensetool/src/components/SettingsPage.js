@@ -2,15 +2,9 @@ import { useState } from 'react';
 import SaveSuccessfully from './UIKit/SaveSuccessfully';
 import UserService from '../service/userService';
 import TextField from '@mui/material/TextField';
-
 import { CreateInitialDate, CreateFinalDate } from "../service/daysTrackingService"
-import environment from '../environments/environment';
-
 
 const SettingsPage = () => {
-
-
-
     const [name, setName] = useState("andree");
     const [currentBalance, setCurrentBalance] = useState(0);
     const [dayTracking, setDayTracking] = useState(Date.now());
@@ -26,15 +20,18 @@ const SettingsPage = () => {
 
     const Submit = async (event) => {
         event.preventDefault();
-
         let initDay = CreateInitialDate(dayTracking);
         let finDate = CreateFinalDate(initDay);
-        let data = { name: name, currentBalance: currentBalance, dayOfTracking: dayTracking, startDate: new Date(initDay), expireDate: new Date(finDate) };
-        
-        await UserService.UpdateUser(data);
+
+        await UserService.UpdateUser({
+            name: name,
+            currentBalance: currentBalance,
+            dayOfTracking: dayTracking,
+            startDate: new Date(initDay),
+            expireDate: new Date(finDate)
+        });
         setUserAdded(true);
     }
-
 
     if (!userAdded) {
         return (
@@ -51,7 +48,6 @@ const SettingsPage = () => {
                             label="Name"
                         />
                     </div>
-                    
                     <div>
                         <div>Insert Current balance:</div>
                         <br />
@@ -66,7 +62,6 @@ const SettingsPage = () => {
                             }}
                         />
                     </div>
-
                     <div>
                         <div>Insert expiration date :</div>
                         <br />
@@ -95,7 +90,6 @@ const SettingsPage = () => {
             <SaveSuccessfully Continue={() => { setUserAdded(false) }} />
         </div>
     )
-
 }
 
 

@@ -11,7 +11,8 @@ class ExpensesController {
             user: {
                 _id: process.env.USERID
             },
-            date: expense.date
+            date: expense.date,
+            description: expense.description
         })
 
         await newExpenseMongo.save()
@@ -40,12 +41,13 @@ class ExpensesController {
         return expensesByDates
     }
 
-    async updateExpense(id,newExpense){
+    async updateExpenseById(id,newExpense){
         return await Expenses.updateOne({"_id": id},{$set:{...newExpense}})
     }
 
-    async deleteExpense(id){
-        return   await Expenses.deleteOne({'_id':id})
+    async deleteExpenseById(id){
+        console.log(id);
+        return  await Expenses.deleteOne({'_id':id})
     }
 }
 

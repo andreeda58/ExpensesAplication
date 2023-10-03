@@ -11,23 +11,24 @@ const AddExpensePage = () => {
 
 
     const navigate = useNavigate();
-    const [storeName, setStoreName] = useState("Stam");
+    const [storeName, setStoreName] = useState("");
     const [totalExpense, setTotalExpense] = useState(0);
+    const [description, setDescription] = useState("");
 
     const [expenseAdded, setExpenseAdded] = useState(false);
     const [dataFound, setDataFound] = useState(false);
-    const [error,setError]=useState(false);
+    const [error, setError] = useState(false);
 
     const continueClicked = (event) => { setExpenseAdded(event) }
-    
+
     const Submit = async (event) => {
         event.preventDefault();
 
-        if(totalExpense === 0){setError(true);return}
-
+        if (totalExpense === 0) { setError(true); return }
         let data = {
             storeName: storeName,
             totalExpense: totalExpense,
+            description: description,
             date: Date.now()
         }
         await ExpensesService.addExpenses(data);
@@ -36,10 +37,10 @@ const AddExpensePage = () => {
         setExpenseAdded(true);
     }
     const CancelButtonClicked = () => {
-        
-        if (storeName.trim() !== "" || totalExpense !== 0) 
+
+        if (storeName.trim() !== "" || totalExpense !== 0)
             setDataFound(true);
-        else 
+        else
             navigate("/")
     }
 
@@ -47,22 +48,14 @@ const AddExpensePage = () => {
     if (!expenseAdded) {
         return (
             <div className='container'>
-                <div>
-                    Store Name:
-                </div>
-                <br/>
                 <TextField
                     id="outlined-required"
                     value={storeName}
                     onChange={(event) => setStoreName(event.target.value)}
                     variant="outlined"
                     label="Store"
+                    className='space'
                 />
-                <div>
-                    Total Expense:
-                </div>
-                <br/>
-
                 <TextField
                     id="outlined-number"
                     value={totalExpense}
@@ -73,9 +66,20 @@ const AddExpensePage = () => {
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    className='space'
                 />
-                 <br/>
-                 <br/>
+                <TextField
+                    id="outlined-number"
+                    value={description}
+                    variant="outlined"
+                    label="description"
+                    onChange={(event) => setDescription(event.target.value)}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    className='space'
+                />
+                <br />
                 <div id='wrapper btns'>
                     <button className="btn btn-primary" onClick={Submit}>Add</button>
                     <button className="btn btn-danger" onClick={CancelButtonClicked}>cancel</button>
@@ -83,28 +87,24 @@ const AddExpensePage = () => {
                 {
                     error && (<div>
                         <h5 className="alert alert-danger"> Fill de Total Expense</h5>
-                        </div>)}
+                    </div>)}
 
                 {dataFound && (<div>
                     <Card>
                         <CardContent>
                             <h5>Are You Sure??</h5>
-                            <button className="btn btn-primary" onClick={()=>{navigate("/")}}>yes</button>
-                            <button className="btn btn-danger" onClick={() => {setDataFound(false) }}>no</button>
+                            <button className="btn btn-primary" onClick={() => { navigate("/") }}>yes</button>
+                            <button className="btn btn-danger" onClick={() => { setDataFound(false) }}>no</button>
                         </CardContent>
                     </Card>
-
                 </div>)}
-            </div>
-        )
-    }
+            </div>)}
 
     return (
         <div>
             <SaveSuccessfully Continue={continueClicked} />
         </div>
     )
-
 }
 
 

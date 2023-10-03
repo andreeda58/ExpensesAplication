@@ -5,21 +5,24 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default function ImgMediaCard({title,description ,UpdateClicked ,DeleteClicked}) {
+export default function CardMedia({id ,title,firstDescription,secondDescription ,UpdateClicked ,DeleteClicked}) {
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card key={id} sx={{ maxWidth: 345 }}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
+        <Typography variant="body1" color="text.secondary">
+          {firstDescription}
+        </Typography>
         <Typography variant="body2" color="text.secondary">
-          {description}
+          Price : {secondDescription}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={UpdateClicked}>Update</Button>
-        <Button size="small" onClick={DeleteClicked}>Delete</Button>
+        <Button size="small" onClick={()=>UpdateClicked(id)}>Update</Button>
+        <Button size="small" onClick={()=>DeleteClicked(id)}>Delete</Button>
       </CardActions>
     </Card>
   );

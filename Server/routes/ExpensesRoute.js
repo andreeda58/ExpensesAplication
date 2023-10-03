@@ -21,7 +21,8 @@ router.put("/updateExpense/:id",asyncHandler(async (req,res)=>{
 
 router.delete("/deleteExpense/:id",asyncHandler(async(req,res)=>{
   const {id} = req.params;
-  const data = await   controller.deleteExpenseById(id );
+  console.log("router");
+  const data = await   controller.deleteExpenseById(id);
   res.status(200).send(data);
 }))
 

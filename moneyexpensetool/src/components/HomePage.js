@@ -3,15 +3,22 @@ import ExpensesService from "../service/expensesService";
 import UserService from "../service/userService";
 import { CreateInitialDate, CreateFinalDate } from "../service/daysTrackingService"
 import environment from "../environments/environment";
+import CardMedia from "./UIKit/Card";
 
 
 const HomePage = () => {
-
     const [buttonDetailsClicked, setButtonDetailsClicked] = useState(false);
     const [user, setUser] = useState();
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [allExpensesByDate, setAllExpensesByDate] = useState(0);
 
+
+    useEffect(() => {
+        LoadDataAsync();
+    }, [])
+
+
+    //fetch data
     const LoadDataAsync = async () => {
         let user = await UserService.getUserById(environment.userId)
 
@@ -43,33 +50,37 @@ const HomePage = () => {
         setUser(user.data);
     }
 
-    useEffect(() => {
-        LoadDataAsync();
-    }, [])
+    //delete expense from database and ui
+    const handleDelete = async(id) => {
+            await ExpensesService.deleteExpense(id);
+            const newData =allExpensesByDate.filter((item)=>item._id!==id)
+            setAllExpensesByDate(newData);
+    }
 
+    //update expense from database and ui
+    const handleUpdate = (id) => {
+    }
 
-
-
-    const ShowExpenses = (props) => {
-        if (props.expenses) {
-
-            return props.expenses.map((item) => {
+    const ShowExpenses = ({ expenses }) => {
+        if (expenses) {
+            return expenses.map((item) => {
                 return (
-                    <div key={item._id} id={item._id}>
-                        {item.storeName && (<h5>{`StoreName : ${item.storeName}`}</h5>)}
-                        <h5>{`Expense : ${item.totalExpense}`}</h5>
-                        <h5>{`Date: ${item.date.toString()}`}</h5>
-                        <br />
-                    </div>
+                    <CardMedia
+                        key={item._id}
+                        title={item.storeName}
+                        id={item._id}
+                        firstDescription={item?.description}
+                        secondDescription={item?.totalExpense}
+                        DeleteClicked={handleDelete}
+                        UpdateClicked={handleUpdate} />
                 )
             })
         }
-        return (<div></div>)
+        return (<h3>Expenses not found</h3>)
     }
 
     return (
         <div>
-
             <h1>
                 HomePage
             </h1>
@@ -94,6 +105,4 @@ const HomePage = () => {
         </div>
     )
 }
-
-
 export default HomePage;
