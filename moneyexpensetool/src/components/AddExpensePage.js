@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SaveSuccessfully from './UIKit/SaveSuccessfully';
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import ExpensesService from '../service/expensesService';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
@@ -11,6 +11,10 @@ const AddExpensePage = () => {
 
 
     const navigate = useNavigate();
+    const { state } = useLocation();
+
+
+
     const [storeName, setStoreName] = useState("");
     const [totalExpense, setTotalExpense] = useState(0);
     const [description, setDescription] = useState("");
@@ -19,30 +23,53 @@ const AddExpensePage = () => {
     const [dataFound, setDataFound] = useState(false);
     const [error, setError] = useState(false);
 
-    const continueClicked = (event) => { setExpenseAdded(event) }
+    const LoadExpenseAsync = async () => {
+        if (state !== null) {
+            //get expense from db 
+            const expense = await ExpensesService.getExpenseById(state.id);
+            setStoreName(expense.data.storeName);
+            setTotalExpense(expense.data.totalExpense);
+            setDescription(expense.data.description);
+        }
+    }
+
+
+    useEffect(() => {
+        LoadExpenseAsync();
+    }, [])
+
 
     const Submit = async (event) => {
         event.preventDefault();
 
+        debugger
+
         if (totalExpense === 0) { setError(true); return }
-        let data = {
+
+        const data = {
             storeName: storeName,
             totalExpense: totalExpense,
             description: description,
             date: Date.now()
         }
-        await ExpensesService.addExpenses(data);
+
+        if (state !== null)
+            ExpensesService.updateExpense(state.id, data); //update exist expense
+        else
+            await ExpensesService.addExpenses(data); //new expense
+
+        //restart
         setStoreName("")
         setTotalExpense(0)
         setExpenseAdded(true);
     }
     const CancelButtonClicked = () => {
-
         if (storeName.trim() !== "" || totalExpense !== 0)
             setDataFound(true);
         else
             navigate("/")
     }
+
 
 
     if (!expenseAdded) {
@@ -74,9 +101,7 @@ const AddExpensePage = () => {
                     variant="outlined"
                     label="description"
                     onChange={(event) => setDescription(event.target.value)}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
+                    InputLabelProps={{ shrink: true }}
                     className='space'
                 />
                 <br />
@@ -88,7 +113,6 @@ const AddExpensePage = () => {
                     error && (<div>
                         <h5 className="alert alert-danger"> Fill de Total Expense</h5>
                     </div>)}
-
                 {dataFound && (<div>
                     <Card>
                         <CardContent>
@@ -98,14 +122,15 @@ const AddExpensePage = () => {
                         </CardContent>
                     </Card>
                 </div>)}
-            </div>)}
+            </div>)
+    }
 
     return (
         <div>
-            <SaveSuccessfully Continue={continueClicked} />
+            <SaveSuccessfully Continue={() => setExpenseAdded(false)} />
         </div>
     )
+
+
 }
-
-
 export default AddExpensePage;

@@ -12,6 +12,14 @@ router.get("/getExpensesByUserId/:id", asyncHandler(async (req, res) => {
 
 }))
 
+
+router.get("/getExpenseById/:id", asyncHandler(async (req, res) => {
+  const {id} = req.params;
+  const data = await controller.getExpenseById(id);
+  res.send(data).status(200);
+
+}))
+
 router.put("/updateExpense/:id",asyncHandler(async (req,res)=>{
   const {id}=req.params;
   const data = await  controller.updateExpenseById(id ,req.body);

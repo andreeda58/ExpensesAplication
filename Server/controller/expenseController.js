@@ -49,6 +49,10 @@ class ExpensesController {
         console.log(id);
         return  await Expenses.deleteOne({'_id':id})
     }
+
+    async getExpenseById(id){
+        return  await Expenses.findOne({'_id' : id});
+    }
 }
 
 module.exports = new ExpensesController();

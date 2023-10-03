@@ -4,9 +4,12 @@ import UserService from "../service/userService";
 import { CreateInitialDate, CreateFinalDate } from "../service/daysTrackingService"
 import environment from "../environments/environment";
 import CardMedia from "./UIKit/Card";
+import { useNavigate } from "react-router-dom";
 
 
 const HomePage = () => {
+
+    const navigate=useNavigate();
     const [buttonDetailsClicked, setButtonDetailsClicked] = useState(false);
     const [user, setUser] = useState();
     const [totalExpenses, setTotalExpenses] = useState(0);
@@ -59,6 +62,7 @@ const HomePage = () => {
 
     //update expense from database and ui
     const handleUpdate = (id) => {
+        navigate("/AddExpensePage",{state:{id}})
     }
 
     const ShowExpenses = ({ expenses }) => {
