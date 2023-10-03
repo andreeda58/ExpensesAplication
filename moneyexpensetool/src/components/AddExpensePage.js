@@ -106,7 +106,9 @@ const AddExpensePage = () => {
                 />
                 <br />
                 <div id='wrapper btns'>
-                    <button className="btn btn-primary" onClick={Submit}>Add</button>
+                    <button className="btn btn-primary" onClick={Submit}>
+                    {state ? "Update" : "Add"} 
+                    </button>
                     <button className="btn btn-danger" onClick={CancelButtonClicked}>cancel</button>
                 </div>
                 {

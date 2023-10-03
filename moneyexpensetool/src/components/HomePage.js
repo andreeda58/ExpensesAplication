@@ -20,20 +20,29 @@ const HomePage = () => {
         LoadDataAsync();
     }, [])
 
+    const UpdateInfoData=async(initDay,finDate)=>{
+        let sum = await ExpensesService.getSumExpensesByDates({ startDate: initDay, expireDate: finDate })
+        let filterExpenses = await ExpensesService.getExpensesByDates({ startDate: initDay, expireDate: finDate })
+
+        setTotalExpenses(sum.data.length === 0 ? 0 : sum.data.sum);
+        setAllExpensesByDate(filterExpenses.data);
+    }
 
     //fetch data
     const LoadDataAsync = async () => {
         let user = await UserService.getUserById(environment.userId)
 
-        let initDay = user.data.startDate;
-        let finDate = user.data.expireDate;
+        var initDay = user.data.startDate;
+        var finDate = user.data.expireDate;
         let actualDate = new Date(Date.now())
 
         let expireDateFormat = new Date(user.data.expireDate)
 
         if (actualDate > expireDateFormat) {
-
-            let sumOldExpenses = await ExpensesService.getSumExpensesByDates({ startDate: initDay, expireDate: finDate })
+            let sumOldExpenses = await ExpensesService.getSumExpensesByDates({ 
+                startDate: initDay, 
+                expireDate: finDate 
+            })
 
             initDay = CreateInitialDate(user.data.dayOfTracking)
             finDate = CreateFinalDate(initDay);
@@ -44,12 +53,7 @@ const HomePage = () => {
                 currentBalance: user.data.currentBalance - (sumOldExpenses.data.length === 0 ? 0 : sumOldExpenses.data.sum)
             });
         }
-
-        let sum = await ExpensesService.getSumExpensesByDates({ startDate: initDay, expireDate: finDate })
-        let filterExpenses = await ExpensesService.getExpensesByDates({ startDate: initDay, expireDate: finDate })
-
-        setTotalExpenses(sum.data.length === 0 ? 0 : sum.data.sum);
-        setAllExpensesByDate(filterExpenses.data);
+        UpdateInfoData(initDay,finDate);
         setUser(user.data);
     }
 
@@ -57,6 +61,7 @@ const HomePage = () => {
     const handleDelete = async(id) => {
             await ExpensesService.deleteExpense(id);
             const newData =allExpensesByDate.filter((item)=>item._id!==id)
+            UpdateInfoData(user.startDate,user.expireDate);
             setAllExpensesByDate(newData);
     }
 
