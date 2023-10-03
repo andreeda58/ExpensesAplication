@@ -39,6 +39,14 @@ class ExpensesController {
 
         return expensesByDates
     }
+
+    async updateExpense(id,newExpense){
+        return await Expenses.updateOne({"_id": id},{$set:{...newExpense}})
+    }
+
+    async deleteExpense(id){
+        return   await Expenses.deleteOne({'_id':id})
+    }
 }
 
 module.exports = new ExpensesController();
